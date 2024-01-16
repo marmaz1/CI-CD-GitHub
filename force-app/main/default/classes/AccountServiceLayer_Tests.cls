@@ -15,6 +15,7 @@ private inherited sharing class AccountServiceLayer_Tests {
 
 
 //testowy koment walidacja 1
+//walidacje PR prez CI
 
 
 
