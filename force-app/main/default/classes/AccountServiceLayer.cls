@@ -78,6 +78,7 @@ public with sharing class AccountServiceLayer {
      * System.debug([SELECT Name, Description FROM Account WHERE id in : accounts]);
      **/
     public static List<Account> incrementCounterInDescription(
+        
         List<Account> incomingAccounts,
         Boolean save
     ) {
@@ -99,6 +100,7 @@ public with sharing class AccountServiceLayer {
         if (save) {
             safelySave(incomingAccounts);
         }
+        System.debug('TEST1');
         return incomingAccounts;
     }
 
