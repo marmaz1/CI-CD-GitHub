@@ -16,13 +16,6 @@ jobs:
   pr-int-branch-validate: #nazwa konretnego joba, moze byc dowolna i wyswietlana jest w konsoli jako step
     #runs-on: okresla konkretny typ VM ktory wybieramy (linux,ubuntu,windows,mac).  Tutaj wybieramy najnowsza wersje Ubuntu
     runs-on: ubuntu-latest  
-
-  permissions:
-  security-events: write
- actions: read
-  contents: read
-
-    
     steps:  #kazdy job zawiera sekwencje krokow do wykonania
         #1 krok
       - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
