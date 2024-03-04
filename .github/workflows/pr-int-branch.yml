@@ -1,6 +1,5 @@
 name: pr-int-branch  #unikalna nazwa joba
 on: #definicja kiedy ma sie odpalic job, jakie typy eventow
-  
   pull_request: #okreslenie, ze ma dotyczyc tylko PR
     types:  #konkretne akce w PR
       - opened
