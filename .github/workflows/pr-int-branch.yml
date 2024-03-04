@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest  
     steps:  #kazdy job zawiera sekwencje krokow do wykonania
         #1 krok
-      - uses: actions/setup-node@v3 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
+      - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
         with:
-          node-version: "14"  #konkretny numer wersji 
+          node-version: "20"  #konkretny numer wersji 
         #2 krok
       - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
         uses: actions/checkout@v3 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
@@ -78,7 +78,7 @@ jobs:
           --outfile 'apexScanResults.sarif'
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: delta/apexScanResults.sarif
     
