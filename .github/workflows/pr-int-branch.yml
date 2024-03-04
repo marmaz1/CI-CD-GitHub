@@ -80,10 +80,11 @@ jobs:
 
   #skanner, odpalenie skanera, ustalenie categorii do sprawdzenia, upload pliku na github
       - name: Scan code
-        run: cd changed-sources
+        run: cd delta
         sfdx scanner:run --format sarif --target 'delta/**/*.cls'
           --category 'Design,Best Practices,Performance,Code Style,Security'
           --outfile 'apexScanResults.sarif'
+        cd ..
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
