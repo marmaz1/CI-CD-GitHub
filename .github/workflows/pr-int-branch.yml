@@ -10,15 +10,19 @@ on: #definicja kiedy ma sie odpalic job, jakie typy eventow
     branches: #ten tag pozwala okreslic jakiego konkretnie brancha ma dotyczyc caly job, dzieki temu zapobiegamy odpalaniu gdy PR dotyczna innego brancha, tutaj
               #wylacznie okreslamy akcje gdy powstanie PR nowych zmian do Inta
       - int
-  permissions:
-  contents: read
-  security-events: write
 
 #Jobs: czyli konkretne zadania jakie maja zostac odpalone gdy kryteria wyzej zostana spelnione      
 jobs:
   pr-int-branch-validate: #nazwa konretnego joba, moze byc dowolna i wyswietlana jest w konsoli jako step
     #runs-on: okresla konkretny typ VM ktory wybieramy (linux,ubuntu,windows,mac).  Tutaj wybieramy najnowsza wersje Ubuntu
     runs-on: ubuntu-latest  
+
+  permissions:
+  security-events: write
+ actions: read
+  contents: read
+
+    
     steps:  #kazdy job zawiera sekwencje krokow do wykonania
         #1 krok
       - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
