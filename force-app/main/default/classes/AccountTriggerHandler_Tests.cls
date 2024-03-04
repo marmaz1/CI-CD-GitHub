@@ -15,7 +15,7 @@ private inherited sharing class AccountTriggerHandler_Tests {
         System.Assert.areEqual(
             1,
             Integer.valueOf(check.Description),
-            'Expected to see that the before insert trigger has updated the description'
+            'Expected to see that the before insert trigger has updated the descriptionaaaaaaaaaaa'
         );
     }
 
