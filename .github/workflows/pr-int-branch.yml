@@ -1,6 +1,6 @@
-
 name: pr-int-branch  #unikalna nazwa joba
 on: #definicja kiedy ma sie odpalic job, jakie typy eventow
+  
   pull_request: #okreslenie, ze ma dotyczyc tylko PR
     types:  #konkretne akce w PR
       - opened
@@ -10,6 +10,9 @@ on: #definicja kiedy ma sie odpalic job, jakie typy eventow
     branches: #ten tag pozwala okreslic jakiego konkretnie brancha ma dotyczyc caly job, dzieki temu zapobiegamy odpalaniu gdy PR dotyczna innego brancha, tutaj
               #wylacznie okreslamy akcje gdy powstanie PR nowych zmian do Inta
       - int
+  permissions:
+  contents: read
+  security-events: write
 
 #Jobs: czyli konkretne zadania jakie maja zostac odpalone gdy kryteria wyzej zostana spelnione      
 jobs:
