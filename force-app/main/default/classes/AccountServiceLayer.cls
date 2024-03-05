@@ -6,7 +6,7 @@
  * @group Shared Code
  * @see AccountTriggerHandler
  */
-public with sharing class AccountServiceLayer {
+public without sharing class AccountServiceLayer {
     @testVisible
     private static String didExecuteMethod;
 
@@ -53,6 +53,7 @@ public with sharing class AccountServiceLayer {
             Account uAcct = account.clone(true);
             uAcct.ShippingStreet = '229b Baker st.';
             updated.add(uAcct);
+            System.debug('testowa wiadomosc');
         }
         if (
             CanTheUser.edit(updated[0]) &&
@@ -77,12 +78,13 @@ public with sharing class AccountServiceLayer {
      * AccountServiceLayer.incrementCounterInDescription(accounts, true);
      * System.debug([SELECT Name, Description FROM Account WHERE id in : accounts]);
      **/
-    public static List<Account> incrementCounterInDescription(
+    public static List<Account> incrementcounterindescription(
         List<Account> incomingAccounts,
         Boolean save
     ) {
         for (Account ia : incomingAccounts) {
             Integer counter = 0;
+            System.debug('testowa wiadomosc');
             try {
                 if (ia.Description != null) {
                     counter = Integer.valueOf(ia.Description);
