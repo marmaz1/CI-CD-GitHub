@@ -6,7 +6,7 @@
  * @group Shared Code
  * @see AccountTriggerHandler
  */
-public with sharing class AccountServiceLayer {
+public with sharing class accountservicelayer {
     @testVisible
     private static String didExecuteMethod;
 
@@ -77,7 +77,7 @@ public with sharing class AccountServiceLayer {
      * AccountServiceLayer.incrementCounterInDescription(accounts, true);
      * System.debug([SELECT Name, Description FROM Account WHERE id in : accounts]);
      **/
-    public static List<Account> incrementCounterInDescription(
+    public static List<Account> incrementcounterindescription(
         List<Account> incomingAccounts,
         Boolean save
     ) {
@@ -90,7 +90,7 @@ public with sharing class AccountServiceLayer {
             } catch (System.TypeException te) {
                 System.debug(
                     LoggingLevel.INFO,
-                    'failed safely to 0 during init'
+                    'failed safely to 0 during init aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
                 );
             }
             counter++;

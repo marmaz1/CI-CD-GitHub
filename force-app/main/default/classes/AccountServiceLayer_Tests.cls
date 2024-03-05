@@ -1,7 +1,7 @@
 @isTest
-private inherited sharing class AccountServiceLayer_Tests {
+private inherited sharing class accountservicelayer_tests {
     @isTest
-    static void justWriteALogStatementPositive() {
+    static void justwritealogstatementpositive() {
         Test.startTest();
         AccountServiceLayer.justWriteALogStatement('Hello Stream Viewers');
         Test.stopTest();
@@ -9,7 +9,7 @@ private inherited sharing class AccountServiceLayer_Tests {
         System.Assert.areEqual(
             'Hello Stream Viewers',
             AccountServiceLayer.didExecuteMethod,
-            'Expected the log to match the input parameter.'
+            'Expected the log to match the input parameter. 11                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
         );
     }
 
@@ -87,9 +87,7 @@ private inherited sharing class AccountServiceLayer_Tests {
         Test.stopTest();
         System.Assert.areEqual(
             5,
-            updatedAccounts.size(),
-            'updatedAccounts should have 5 accounts'
-        );
+            updatedAccounts.size());
         for (Account ua : updatedAccounts) {
             System.Assert.areEqual(
                 1,
@@ -101,8 +99,13 @@ private inherited sharing class AccountServiceLayer_Tests {
 
     @isTest
     static void incrementDescriptionOnBulkAccountsNegativeInvalidIntegerSaves() {
-        List<Account> theAccounts = (List<Account>) TestFactory.createSObjectList(
-            new Account(description = 'Hello'),
+        List<Account> theAccounts = (List<Account>) 
+                                        TestFactory.createSObjectList(
+           
+        
+        
+        
+        new Account(description = 'Hello'),
             5
         );
         Boolean didCatchTheRightException = false;
