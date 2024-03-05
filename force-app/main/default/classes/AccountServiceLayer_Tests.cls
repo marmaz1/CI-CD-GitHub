@@ -94,7 +94,7 @@ private inherited sharing class AccountServiceLayer_Tests {
             System.Assert.areEqual(
                 1,
                 integer.valueOf(ua.Description),
-                'Expected the code to have incremented to 1'
+                'Expected the code to have incremented to 111111'
             );
         }
     }
