@@ -1,0 +1,93 @@
+name: pr-int-branch  #unikalna nazwa joba
+on: #definicja kiedy ma sie odpalic job, jakie typy eventow
+  pull_request: #okreslenie, ze ma dotyczyc tylko PR
+    types:  #konkretne akce w PR
+      - opened
+      - synchronize
+    paths:
+      - force-app/**  #okreslamy, ze maja byc zczytywane zmiany jedynie z force-app, nie chcemy walidowac tutaj innych zmian z plikow konfiguracyjnych
+    branches: #ten tag pozwala okreslic jakiego konkretnie brancha ma dotyczyc caly job, dzieki temu zapobiegamy odpalaniu gdy PR dotyczna innego brancha, tutaj
+              #wylacznie okreslamy akcje gdy powstanie PR nowych zmian do Inta
+      - int
+
+#Jobs: czyli konkretne zadania jakie maja zostac odpalone gdy kryteria wyzej zostana spelnione      
+jobs:
+  pr-int-branch-validate: #nazwa konretnego joba, moze byc dowolna i wyswietlana jest w konsoli jako step
+    #runs-on: okresla konkretny typ VM ktory wybieramy (linux,ubuntu,windows,mac).  Tutaj wybieramy najnowsza wersje Ubuntu
+    runs-on: ubuntu-latest  
+    steps:  #kazdy job zawiera sekwencje krokow do wykonania
+        #1 krok
+      - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
+        with:
+          node-version: "20"  #konkretny numer wersji 
+        #2 krok
+      - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
+        uses: actions/checkout@v3 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
+        with:
+          fetch-depth: 0 #ten tag pozwala na uzyskanie dostepu do poprzednich commitow ktore zostaly pushowane do repo, potrzebne pozniej to generowania delty i roznic pomiedzy commitami
+        #3 step
+      - name: Install Salesforce CLI  
+        run: >  #instalacja CLI na VM
+          wget
+          https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+
+          mkdir ~/sfdx
+
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+
+          ~/sfdx/bin/sfdx version
+
+        #4 step , pobranie zmiennej zawierajacej kod AUTH do danego orga
+        #do zmiennej w github, Secret dodany jest kod autoryzujacy do orga na ktory chcemy walidowac nasze zmainy, kod jest ukryty
+      - name: Populate auth file with SFDX_URL secret of target org 
+        run: | #odpalamy komende ktora pobiera nam zapisany wczesniej skrypt INT_URL, nastepnie konwertuje go w plik TXT zeby uzyc go przy autoryzacji w dalszym kroku
+          echo ${{ secrets.INT_URL}} > ./INT_URL.txt
+        #5 step - autoryzacja do orga  
+      - name: Authenticate to target Org
+        run: sfdx auth:sfdxurl:store -f ./INT_URL.txt -s -a targetOrg #odpalamy komende sfdx do autoryzacji orga, wskazujemy jej plik txt z kodem AUTH ktorego uzyje do zalogowani
+        #6 step - instalacja delty
+      - name: Installing sfdx git delta
+        run: |
+          echo y | sfdx plugins:install sfdx-git-delta
+          sfdx plugins 
+
+
+#instalacja skannera
+      - name: Installing java
+        run: sudo apt-get update && sudo apt-get install default-jdk
+      - name: Installing SFDX scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner
+
+
+
+
+        #7 step - stworzenie katalogu Delta, wygenerowanie delty oraz zapisanei wynikow w tym katalogu  
+      - name: Create delta packages for new, modified or deleted metadata
+        run: >
+          mkdir delta
+
+          sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output delta/ --generate-delta --source force-app/ 
+
+  #skanner, odpalenie skanera, ustalenie categorii do sprawdzenia, upload pliku na github
+      - name: Scan code
+        run: cd delta
+        sfdx scanner:run --format sarif --target 'delta/**/*.cls'
+          --category 'Design,Best Practices,Performance,Code Style,Security'
+          --outfile 'apexScanResults.sarif'
+        cd ..
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: delta/apexScanResults.sarif
+    
+
+
+
+
+      - name: Deployment - run all tests
+        run: >
+          sfdx force:source:deploy -p "delta/force-app" --checkonly
+          --testlevel RunLocalTests --json
