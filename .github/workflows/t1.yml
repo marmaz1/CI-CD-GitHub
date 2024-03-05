@@ -71,7 +71,7 @@ jobs:
       - name: Scan code
         run: |
                   cd delta
-                  sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'  
+                  sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance,Code Style,Security" --outfile 'apexScanResults.sarif'  
                   cd ..
           
       - name: Upload SARIF file
