@@ -53,29 +53,30 @@ jobs:
           echo y | sfdx plugins:install sfdx-git-delta
           sfdx plugins 
 
-
-#instalacja skannera
-      - name: Installing java
-        run: sudo apt-get update && sudo apt-get install default-jdk
-      - name: Installing SFDX scanner
-        run: sfdx plugins:install @salesforce/sfdx-scanner
-
-
-
-
         #7 step - stworzenie katalogu Delta, wygenerowanie delty oraz zapisanei wynikow w tym katalogu  
       - name: Create delta packages for new, modified or deleted metadata
         run: >
           mkdir delta
 
           sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output delta/ --generate-delta --source force-app/ 
+          
+#instalacja skannera
+      - name: Installing java
+        run: sudo apt-get update && sudo apt-get install default-jdk
+        
 
+      - name: Installing scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner
+        
+      - name: Scan code
+        run: sfdx scanner:run --format sarif --target 'delta/**/*.cls'
+          --category 'Design,Best Practices,Performance,Code Style,Security'
+          --outfile 'apexScanResults.sarif'
+          
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: delta/apexScanResults.sarif
-    
-
 
 
 
