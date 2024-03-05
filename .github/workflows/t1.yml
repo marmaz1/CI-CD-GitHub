@@ -1,4 +1,4 @@
-name: t1  #unikalna nazwa joba
+name: pr-int-branch  #unikalna nazwa joba
 on: #definicja kiedy ma sie odpalic job, jakie typy eventow
   pull_request: #okreslenie, ze ma dotyczyc tylko PR
     types:  #konkretne akce w PR
@@ -69,13 +69,6 @@ jobs:
           mkdir delta
 
           sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output delta/ --generate-delta --source force-app/ 
-
-  #skanner, odpalenie skanera, ustalenie categorii do sprawdzenia, upload pliku na github
-     - name: Scan code
-        run: |
-              cd delta
-              sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'  
-              cd ..
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
