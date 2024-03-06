@@ -53,6 +53,7 @@ public with sharing class AccountServiceLayer {
             Account uAcct = account.clone(true);
             uAcct.ShippingStreet = '229b Baker st.';
             updated.add(uAcct);
+            System.debug('TEST DEBUG');
         }
         if (
             CanTheUser.edit(updated[0]) &&
@@ -83,6 +84,7 @@ public with sharing class AccountServiceLayer {
     ) {
         for (Account ia : incomingAccounts) {
             Integer counter = 0;
+            System.debug('TEST DEBUG');
             try {
                 if (ia.Description != null) {
                     counter = Integer.valueOf(ia.Description);
