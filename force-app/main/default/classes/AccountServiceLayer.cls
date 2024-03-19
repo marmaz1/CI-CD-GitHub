@@ -60,6 +60,7 @@ public with sharing class AccountServiceLayer {
             CanTheUser.flsUpdatable('Account', 'shippingStreet')
         ) {
             update updated;
+            System.debug('Testowy debug');
         } else {
             throw new CanTheUser.CanTheUserException(
                 'User has no permission to edit accounts'
