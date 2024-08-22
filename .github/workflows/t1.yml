@@ -22,6 +22,11 @@ jobs:
           node-version: "20"  #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
           check-latest: true
         #2 krok
+
+      - name: node version
+        run: |
+             node -v
+        
       - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
         uses: actions/checkout@v4 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
         with:
@@ -60,15 +65,18 @@ jobs:
           mkdir delta
 
           sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output delta/ --generate-delta --source force-app/ 
-          
+
+      - name: node version
+        run: |
+             node -v    
+             
 #instalacja skannera
       - name: Installing java
         run: sudo apt-get update && sudo apt-get install default-jdk
 
-      - name: Install Node.js 20
+      - name: node version
         run: |
-          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-          sudo apt-get install -y nodejs
+             node -v
 
       - name: Installing scanner
         run: sfdx plugins:install @salesforce/sfdx-scanner
