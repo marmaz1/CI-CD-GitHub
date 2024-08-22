@@ -64,9 +64,11 @@ jobs:
 #instalacja skannera
       - name: Installing java
         run: sudo apt-get update && sudo apt-get install default-jdk
-      - name: node version
+
+      - name: Install Node.js 20
         run: |
-                  node -v  | npm install -g npm@latest
+          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+          sudo apt-get install -y nodejs
 
       - name: Installing scanner
         run: sfdx plugins:install @salesforce/sfdx-scanner
