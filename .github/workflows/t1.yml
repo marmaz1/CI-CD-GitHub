@@ -34,22 +34,18 @@ jobs:
       - name: Install Salesforce CLI  
         run: >  #instalacja CLI na VM
           wget
-          https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
+          
+          mkdir -p ~/cli/sf
 
-          mkdir ~/sfdx
+          tar xJf sf-linux-x64.tar.xz -C ~/cli/sf --strip-components 1
 
-          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sf/bin" >> $GITHUB_PATH
 
-          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
-
-          ~/sfdx/bin/sfdx version
+          ~/sf/bin/sf version
 
         #4 step , pobranie zmiennej zawierajacej kod AUTH do danego orga
         #do zmiennej w github, Secret dodany jest kod autoryzujacy do orga na ktory chcemy walidowac nasze zmainy, kod jest ukryty
-
-      - name: sfdx update
-        run: |
-             sfdx update
 
       - name: node version
         run: |
