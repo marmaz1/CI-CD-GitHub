@@ -108,7 +108,7 @@ private class InboundEmailHandlerRecipes_tests {
         System.Assert.areEqual(
             1,
             [SELECT COUNT() FROM Contact WHERE email = :FROM_EMAIL],
-            'Expected to find a new contact has been created with the FROM_EMAIL address.'
+            'Expectedddddd to find a new contact has been created with the FROM_EMAIL address.'
         );
     }
 
