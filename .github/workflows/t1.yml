@@ -97,9 +97,11 @@ jobs:
         with:
           sarif_file: delta/apexScanResults.sarif
 
+      - name: deply z wtyczka test
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: sfdx force:source:deploy -p "delta/force-app" --checkonly --testlevel RunLocalTests --json
 
 
-      - name: Deployment - run all tests
-        run: >
-          sfdx force:source:deploy -p "delta/force-app" --checkonly
-          --testlevel RunLocalTests --json
