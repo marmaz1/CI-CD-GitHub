@@ -47,6 +47,10 @@ jobs:
         #4 step , pobranie zmiennej zawierajacej kod AUTH do danego orga
         #do zmiennej w github, Secret dodany jest kod autoryzujacy do orga na ktory chcemy walidowac nasze zmainy, kod jest ukryty
 
+      - name: sfdx update
+        run: |
+             sfdx update
+
       - name: node version
         run: |
              node -v
