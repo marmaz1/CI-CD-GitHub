@@ -34,7 +34,7 @@ jobs:
         with:
           fetch-depth: 0 #ten tag pozwala na uzyskanie dostepu do poprzednich commitow ktore zostaly pushowane do repo, potrzebne pozniej to generowania delty i roznic pomiedzy commitami
         #3 step
-     - name: node version
+      - name: node version
         run: |
              node -v
         
