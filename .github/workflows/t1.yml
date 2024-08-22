@@ -23,9 +23,7 @@ jobs:
           check-latest: true
         #2 krok
 
-      - name: Installing scanner
-        run: sfdx plugins:install @salesforce/sfdx-scanner
-        
+
 
       - name: node version
         run: |
@@ -36,6 +34,10 @@ jobs:
         with:
           fetch-depth: 0 #ten tag pozwala na uzyskanie dostepu do poprzednich commitow ktore zostaly pushowane do repo, potrzebne pozniej to generowania delty i roznic pomiedzy commitami
         #3 step
+     - name: node version
+        run: |
+             node -v
+        
       - name: Install Salesforce CLI  
         run: >  #instalacja CLI na VM
           wget
@@ -48,6 +50,14 @@ jobs:
           echo "$HOME/sfdx/bin" >> $GITHUB_PATH
 
           ~/sfdx/bin/sfdx version
+
+     - name: node version
+        run: |
+             node -v
+
+      - name: Installing scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner
+                  
 
         #4 step , pobranie zmiennej zawierajacej kod AUTH do danego orga
         #do zmiennej w github, Secret dodany jest kod autoryzujacy do orga na ktory chcemy walidowac nasze zmainy, kod jest ukryty
