@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
         with:
           node-version: "20"  #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
+          check-latest: true
         #2 krok
       - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
         uses: actions/checkout@v3 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
