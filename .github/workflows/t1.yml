@@ -15,13 +15,11 @@ jobs:
   pr-int-branch-validate: #nazwa konretnego joba, moze byc dowolna i wyswietlana jest w konsoli jako step
     #runs-on: okresla konkretny typ VM ktory wybieramy (linux,ubuntu,windows,mac).  Tutaj wybieramy najnowsza wersje Ubuntu
     runs-on: ubuntu-latest
-    strategy:
-        max_attempts:3 
     steps:  #kazdy job zawiera sekwencje krokow do wykonania
         #1 krok
       - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
         with:
-          node-version: "20"  #konkretny numer wersji 
+          node-version: "19"  #konkretny numer wersji 
         #2 krok
       - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
         uses: actions/checkout@v3 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
