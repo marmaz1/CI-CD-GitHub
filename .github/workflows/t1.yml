@@ -23,6 +23,10 @@ jobs:
           check-latest: true
         #2 krok
 
+      - name: Installing scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner
+        
+
       - name: node version
         run: |
              node -v
@@ -78,9 +82,7 @@ jobs:
         run: |
              node -v
 
-      - name: Installing scanner
-        run: sfdx plugins:install @salesforce/sfdx-scanner
-        
+
       - name: Scan code
         run: |
                   cd delta
