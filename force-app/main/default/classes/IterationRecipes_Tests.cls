@@ -64,7 +64,7 @@ public class IterationRecipes_Tests {
             System.Assert.isInstanceOfType(
                 baseException,
                 IterableApiClient.IterableApiException.class,
-                'Expected an instance of IterableApiException'
+                'Expected an instance of IterableApiExceptionaa'
             );
         } finally {
             Test.stopTest();
