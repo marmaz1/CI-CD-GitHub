@@ -20,24 +20,12 @@ jobs:
       - uses: actions/setup-node@v4 #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
         with:
           node-version: "20"  #uses: okreslamy czego ma uzyc: tutaj przy uzyciu predefiniowanej akcji github, wybieramy ustawienie node js
-          check-latest: true
         #2 krok
-
-
-
-      - name: node version
-        run: |
-             node -v
-        
       - name: Checkout source code  #nazwa stepu wyswietlana w konsoli
         uses: actions/checkout@v4 #predefiniowana akcja github: robi checkout repozytorium, co pozwala na dzialanie skryptow albo akcji w kontekscie tego repo
         with:
           fetch-depth: 0 #ten tag pozwala na uzyskanie dostepu do poprzednich commitow ktore zostaly pushowane do repo, potrzebne pozniej to generowania delty i roznic pomiedzy commitami
         #3 step
-      - name: node version
-        run: |
-             node -v
-        
       - name: Install Salesforce CLI  
         run: >  #instalacja CLI na VM
           wget
@@ -51,16 +39,13 @@ jobs:
 
           ~/sfdx/bin/sfdx version
 
-     - name: node version
-        run: |
-             node -v
-
-      - name: Installing scanner
-        run: sfdx plugins:install @salesforce/sfdx-scanner
-                  
-
         #4 step , pobranie zmiennej zawierajacej kod AUTH do danego orga
         #do zmiennej w github, Secret dodany jest kod autoryzujacy do orga na ktory chcemy walidowac nasze zmainy, kod jest ukryty
+
+      - name: node version
+        run: |
+             node -v
+        
       - name: Populate auth file with SFDX_URL secret of target org 
         run: | #odpalamy komende ktora pobiera nam zapisany wczesniej skrypt INT_URL, nastepnie konwertuje go w plik TXT zeby uzyc go przy autoryzacji w dalszym kroku
           echo ${{ secrets.INT_URL}} > ./INT_URL.txt
@@ -79,20 +64,23 @@ jobs:
           mkdir delta
 
           sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output delta/ --generate-delta --source force-app/ 
+          
+#instalacja skannera
 
       - name: node version
         run: |
-             node -v    
+             node -v
              
-#instalacja skannera
       - name: Installing java
         run: sudo apt-get update && sudo apt-get install default-jdk
 
       - name: node version
         run: |
-             node -v
+             node -v        
 
-
+      - name: Installing scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner
+        
       - name: Scan code
         run: |
                   cd delta
