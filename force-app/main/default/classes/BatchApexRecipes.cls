@@ -102,7 +102,7 @@ public with sharing class BatchApexRecipes implements Database.Batchable<SObject
      **/
     public void finish(Database.BatchableContext context) {
         BatchApexRecipes.result =
-            'Successes: ' +
+            'Successesssssss: ' +
             successes.size() +
             ' Failures: ' +
             failures.size();
