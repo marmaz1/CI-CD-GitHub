@@ -35,6 +35,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name : print github refs
+        run: |
+          echo "github.event.pull_request.base.ref to: ${{github.event.pull_request.base.ref}}"
+          
       - name: Set environment if int
         if: github.event.pull_request.base.ref == 'refs/heads/int'
         run: |
