@@ -36,13 +36,13 @@ jobs:
           fetch-depth: 0
 
       - name: Set environment if int
-        if: github.ref == 'refs/heads/int'
+        if: github.event.pull_request.base.ref == 'refs/heads/int'
         run: |
           echo "environment=int" >> $GITHUB_ENV
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV
 
       - name: Set environment if int2
-        if: startsWith(github.ref, 'refs/heads/int2')
+        if: startsWith(github.event.pull_request.base.ref, 'refs/heads/int2')
         run: |
           echo "environment=int2" >> $GITHUB_ENV
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV          
