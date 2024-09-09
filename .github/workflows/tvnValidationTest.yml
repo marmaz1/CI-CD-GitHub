@@ -9,7 +9,7 @@ on:
       - synchronize  
     branches:
       - 'int'
-      - 'int2'
+      - 'release/**'
     paths:
       - 'force-app/**'
 
