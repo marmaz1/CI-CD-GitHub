@@ -19,8 +19,7 @@ jobs:
     steps:
       - name: 'Install Salesforce CLI'
         run: |
-          wget 
-          https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
+          wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
           mkdir -p ~/sf
           tar xJf sf-linux-x64.tar.xz -C ~/sf --strip-components 1
           echo "$HOME/sf/bin" >> $GITHUB_PATH
