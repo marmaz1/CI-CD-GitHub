@@ -1,0 +1,128 @@
+name: '[DEVINT3/PREPROD2] Validate Code'
+
+on:
+  workflow_dispatch:
+  #push:
+  pull_request:
+    types:
+      - opened
+      - synchronize  
+    branches:
+      - 'int'
+      - 'int2'
+    paths:
+      - 'force-app/**'
+
+jobs:
+  Validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+
+      - name: 'Install Salesforce SFDX Git Delta'
+        run: |
+          echo y | sfdx plugins:install sfdx-git-delta
+          sfdx plugins
+
+      - name: 'Checkout Source Code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set environment if int
+        if: github.ref == 'refs/heads/int'
+        run: |
+          echo "environment=int" >> $GITHUB_ENV
+          echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV
+
+      - name: Set environment if int2
+        if: startsWith(github.ref, 'refs/heads/int2')
+        run: |
+          echo "environment=int2" >> $GITHUB_ENV
+          echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV          
+
+      - name: Print environment
+        run: |
+          echo "environment: ${{env.environment}}"
+          echo "url: ${{env.auth_url}}"
+
+      # - name: 'Set Target Environment'
+      #   id: env
+      #   run: |
+      #     if [[ "${GITHUB_REF#refs/heads/}" == "develop" ]]; then
+      #       echo "environment=devint3" >> $GITHUB_ENV
+      #       echo "auth_url=${{secrets.SFDX_DEVINT3_URL}}" >> $GITHUB_ENV
+      #     elif [[ "${GITHUB_REF#refs/heads/}" == release/* ]]; then
+      #       echo "environment=preprod2" >> $GITHUB_ENV
+      #       echo "auth_url=${{secrets.SFDX_PREPROD2_URL}}" >> $GITHUB_ENV
+      #     else
+      #       echo "Incorrect target branch."
+      #       exit 1
+      #     fi
+      #   shell: bash
+
+      - name: 'Prepare Changed Files to Validate'
+        run: |
+          mkdir changed-sources
+          sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
+
+      - name: 'Setup Auth Url File'
+        run: |
+          echo ${{ secrets.INT_URL}} > ./INT_URL.txt
+
+
+      - name: 'Authenticate to Target Environment'
+        run: sfdx auth:sfdxurl:store -f ./INT_URL.txt -s -a ${{env.environment}}
+
+      # - name: 'Find Test Classes To Run In Deploy Validation'
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const fs = require('fs');
+      #       const directory = './changed-sources/force-app/main/default/classes';
+
+      #       fs.access(directory, function(error) {
+      #         if (error) {
+      #           core.exportVariable('TEST_TO_RUN', 'None');
+      #         } else {
+      #           const classSet = new Set();
+      #           fileNames = fs.readdirSync(directory);
+      #           fileNames.forEach(file => {
+      #             if (file.slice(file.indexOf('.'), file.length) === '.cls') {
+      #               classSet.add(file);
+      #             }
+      #           });
+            
+      #           const textJson = fs.readFileSync('./ApexTests.json');
+      #           let testMap = new Map(Object.entries(JSON.parse(textJson)));
+      #           let testClassSet = new Set();
+      #           classSet.forEach(element => {
+      #             if (testMap.has(element)) {
+      #               testMap.get(element).split(',').forEach(element => {
+      #                 testClassSet.add(element);
+      #               })
+      #             }
+      #           });
+      #           core.exportVariable('TEST_TO_RUN', Array.from(testClassSet).toString());
+      #         }
+      #       });
+
+      # - name: 'Validate Code to Target Environment'
+      #   run: |
+      #     if [[ $TEST_TO_RUN == 'None' ]]; then
+      #       sfdx force:source:deploy -p changed-sources/force-app -u ${{env.environment}} -c --verbose
+      #     else
+      #       sfdx force:source:deploy -p changed-sources/force-app -u ${{env.environment}} -c --verbose -l RunSpecifiedTests -r $TEST_TO_RUN
+      #     fi
+
+      # - name: 'Validate Destructive Changes to Target Environment'
+      #   run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings
+
+      - name: Validation with Local Tests
+        run: sfdx force:source:deploy -p changed-sources/force-app -u ${{env.environment}} -c --verbose -l RunLocalTests -c
