@@ -81,7 +81,7 @@ jobs:
           echo ${{ secrets.INT_URL}} > ./INT_URL.txt
 
 
-      - name: 'Authenticate to Target Environment'
+      - name: 'Authenticate to Target Environment - ${{env.environment}}'
         run: sfdx auth:sfdxurl:store -f ./INT_URL.txt -s -a ${{env.environment}}
 
       # - name: 'Find Test Classes To Run In Deploy Validation'
