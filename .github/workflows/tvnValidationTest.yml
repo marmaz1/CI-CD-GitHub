@@ -44,8 +44,8 @@ jobs:
           echo "environment=int" >> $GITHUB_ENV
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV
 
-      - name: Set environment if int2
-        if: startsWith(github.event.pull_request.base.ref, 'int2')
+      - name: Set environment if release
+        if: startsWith(github.event.pull_request.base.ref, 'release')
         run: |
           echo "environment=int2" >> $GITHUB_ENV
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV          
@@ -55,10 +55,11 @@ jobs:
           echo "environment: ${{env.environment}}"
           echo "url: ${{env.auth_url}}"
 
-      - name: 'Prepare Changed Files to Validate'
+      - name: 'Generate Changed Files to Validate'
         run: |
           mkdir changed-sources
           sf sgd source delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
+          
       - name: Metadata to Validate from package.xml
         run: cat changed-sources/package/package.xml
 
