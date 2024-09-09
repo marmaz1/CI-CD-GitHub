@@ -45,7 +45,7 @@ jobs:
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV
 
       - name: Set environment if release
-        if: startsWith(github.event.pull_request.base.ref, 'release')
+        if: startsWith(github.event.pull_request.base.ref, 'release/')
         run: |
           echo "environment=int2" >> $GITHUB_ENV
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV          
