@@ -74,5 +74,5 @@ jobs:
         run: sf org login sfdx-url -f ./INT_URL.txt -s -a ${{env.environment}}
 
       - name: Validation with Local Tests
-        run: sf project deploy start -d changed-sources/force-app -o ${{env.environment}} --post-destructive-changes changed-sources/destructiveChanges/destructiveChanges.xml --verbose --test-level RunLocalTests --check-only 
+        run: sf project deploy start -d changed-sources/force-app -o ${{env.environment}} --post-destructive-changes changed-sources/destructiveChanges/destructiveChanges.xml --verbose --test-level RunLocalTests --dry-run
         
