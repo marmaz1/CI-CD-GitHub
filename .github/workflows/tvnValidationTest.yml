@@ -1,0 +1,84 @@
+name: '[DEVINT3/PREPROD2] Validate Code'
+
+on:
+  workflow_dispatch:
+  #push:
+  pull_request:
+    types:
+      - opened
+      - synchronize  
+    branches:
+      - 'int'  #zamienic na 'develop
+      - 'release/**'
+    paths:
+      - 'force-app/**'
+
+jobs:
+  Validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
+          mkdir -p ~/sf
+          tar xJf sf-linux-x64.tar.xz -C ~/sf --strip-components 1
+          echo "$HOME/sf/bin" >> $GITHUB_PATH
+          ~/sf/bin/sf version
+
+      - name: 'Install Salesforce SFDX Git Delta'
+        run: |
+          echo y | sf plugins install sfdx-git-delta
+
+      - name: 'Checkout Source Code'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+#do usuniecia bedzie
+      - name : print github refs
+        run: |
+          echo "github.event.pull_request.base.ref to: ${{github.event.pull_request.base.ref}}"
+          
+      - name: Set environment if int    #zamienic nazwe na Develop
+        if: github.event.pull_request.base.ref == 'int'    #podmienic na 'develop'
+        run: |
+          echo "environment=int" >> $GITHUB_ENV
+          echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV
+        #podmienic nazwe z int na devint3
+        #podmienic tutaj nazwe secretu tvn na SFDX_DEVINT3_URL
+
+      - name: Set environment if Release
+        if: startsWith(github.event.pull_request.base.ref, 'release/')
+        run: |
+          echo "environment=int2" >> $GITHUB_ENV
+          echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV         
+        #podmienic nazwe z int2 na preprod2
+         #podmienic nazwe secretu  na   SFDX_PREPROD2_URL
+         
+    #do usuniecia bedzie potem
+      - name: Print environment
+        run: |
+          echo "environment: ${{env.environment}}"
+          echo "url: ${{env.auth_url}}"
+
+      - name: 'Generate Changed Files to Validate'
+        run: |
+          mkdir changed-sources
+          sf sgd source delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
+          
+      - name: Metadata to Validate from package.xml
+        run: cat changed-sources/package/package.xml
+
+      - name: Metadata to Delete from Destructive Changes
+        run: cat changed-sources/destructiveChanges/destructiveChanges.xml
+
+      - name: 'Setup Auth Url File'
+        run: |
+          echo ${{env.auth_url}} > ./SF_AUTH_URL.txt
+
+      - name: 'Authenticate to Target Environment - ${{env.environment}}'
+        run: sf org login sfdx-url -f ./SF_AUTH_URL.txt -s -a ${{env.environment}}
+
+      - name: Validation with Local Tests
+        run: sf project deploy start --manifest changed-sources/package/package.xml -o ${{env.environment}} --post-destructive-changes changed-sources/destructiveChanges/destructiveChanges.xml --verbose --test-level RunLocalTests --dry-run
+        

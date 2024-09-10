@@ -13,7 +13,7 @@ export default class ErrorPanel extends LightningElement {
 
     viewDetails = false;
 
-    get errorMessages() {
+                    get errorMessages() {
         return reduceErrors(this.errors);
     }
 
