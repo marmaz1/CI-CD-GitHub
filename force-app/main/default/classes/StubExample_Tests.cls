@@ -15,7 +15,7 @@ private class StubExample_Tests {
 
     @isTest
     static void testGetGreetingPositive() {
-        StubExample example = new StubExample();
+                        StubExample example = new StubExample();
         Test.startTest();
         String results = example.getGreeting();
         Test.stopTest();

@@ -37,7 +37,7 @@ global inherited sharing class CustomRestEndpointRecipes {
      * @description private, test visible circiut breaker boolean.
      */
     @TestVisible
-    private static Exception circuitBreaker;
+            private static Exception circuitBreaker;
 
     /**
      * @description @HttpGet exposes a method to a GET request when the custom
