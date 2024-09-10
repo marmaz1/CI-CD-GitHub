@@ -18,7 +18,7 @@
                 <behavior>Edit</behavior>
                 <field>Picklist_Bucket__c</field>
             </layoutItems>
-        </layoutColumns>
+                </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
