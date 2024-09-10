@@ -34,9 +34,10 @@ jobs:
       - name : print github refs
         run: |
           echo "github.ref to: ${{github.ref}}"
+          echo "github.ref_name to: ${{github.ref_name}}"
           
       - name: Set environment if int    #zamienic nazwe na Develop
-        if: github.ref == 'int'               #podmienic na 'develop'
+        if: github.ref_name == 'int'               #podmienic na 'develop'
         run: |
           echo "environment=int" >> $GITHUB_ENV                    
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV       
@@ -44,7 +45,7 @@ jobs:
         #podmienic tutaj nazwe secretu tvn na SFDX_DEVINT3_URL
 
       - name: Set environment if Release      
-        if: startsWith(github.ref, 'release/')
+        if: startsWith(github.ref_name, 'release/')
         run: |
           echo "environment=int2" >> $GITHUB_ENV    
           echo "auth_url=${{secrets.INT_URL}}" >> $GITHUB_ENV        
